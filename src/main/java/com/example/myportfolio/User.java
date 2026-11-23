@@ -5,26 +5,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Column(nullable = false)
+    private String fullName;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    private String passwordHash;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role = "ROLE_USER";
+    private Role role;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Family family;
+
+
+    private String pairingCode;
+    private Instant pairingExpiresAt;
+
+    private Instant createdAt = Instant.now();
 }
